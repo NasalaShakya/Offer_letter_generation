@@ -3,7 +3,7 @@ import pandas as pd
 from docx import Document
 from docx.shared import Inches, Cm
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Entry, Frame, Listbox
+from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Entry, Frame, OptionMenu, Toplevel, Text
 import json
 from fpdf import FPDF
 
@@ -120,7 +120,7 @@ def generate_pdf(ref, name, old_salary, new_salary, old_position, new_position):
     pdf.ln(20)
     pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
     pdf.cell(200, 10, txt="_______________", ln=True, align='L')
-    pdf.cell(200, 10, txt="Sam Browns", ln=True, align='L')
+    pdf.cell(200, 10, txt="Santosh Koirala", ln=True, align='L')
     pdf.cell(200, 10, txt="Executive Director", ln=True, align='L')
     pdf.cell(200, 10, txt="Signed Date:", ln=True, align='L')
     return pdf
@@ -175,12 +175,22 @@ def generate_letters():
             if output_option.get() == "docx":
                 doc = generate_doc(ref, name, old_salary, new_salary, old_position, new_position)
                 doc.save(f"docs/{name.replace(' ', '_')}_Offer_Letter.docx")
+                preview_doc(f"docs/{name.replace(' ', '_')}_Offer_Letter.docx")
             elif output_option.get() == "pdf":
                 pdf = generate_pdf(ref, name, old_salary, new_salary, old_position, new_position)
                 pdf.output(f"docs/{name.replace(' ', '_')}_Offer_Letter.pdf")
+                preview_pdf(f"docs/{name.replace(' ', '_')}_Offer_Letter.pdf")
         messagebox.showinfo("Success", "Offer letters generated successfully and saved in the 'docs' folder.")
     except Exception as e:
         messagebox.showerror("Error", f"Error occurred: {e}")
+
+# Function to preview Word document
+def preview_doc(doc_path):
+    os.system(f'start winword "{doc_path}"')
+
+# Function to preview PDF document
+def preview_pdf(pdf_path):
+    os.system(f'start acrord32 "{pdf_path}"')
 
 def main():
     global excel_file_path, template_file_path, output_option
@@ -193,7 +203,7 @@ def main():
     template_file_path = StringVar()
     output_option = StringVar(value="docx")
 
-    Label(root, text="Welcome to the Automated Letter Generation System", font=("Helvetica", 14)).pack(pady=10)
+    Label(root, text="Welcome to the Offer Letter Generator", font=("Helvetica", 14)).pack(pady=10)
 
     frame = Frame(root)
     frame.pack(pady=10)
@@ -208,8 +218,7 @@ def main():
 
     Label(root, text="Output Option:", font=("Helvetica", 12)).pack(pady=10)
     options = ["docx", "pdf"]
-    for opt in options:
-        Button(root, text=opt.upper(), command=lambda opt=opt: output_option.set(opt), font=("Helvetica", 10)).pack(pady=5, side="left", expand=True)
+    OptionMenu(root, output_option, *options).pack(pady=5)
 
     Button(root, text="Generate and Preview Letters", command=generate_letters, font=("Helvetica", 12)).pack(pady=10)
     Button(root, text="Save Configuration", command=save_config, font=("Helvetica", 12)).pack(pady=5)
