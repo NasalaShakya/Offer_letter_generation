@@ -1,14 +1,14 @@
 import os
 import pandas as pd
 from docx import Document
-from docx.shared import Inches, Cm
+from docx.shared import Cm
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Entry, Frame, OptionMenu, Toplevel, Text
 import json
 from fpdf import FPDF
 
-# Function to generate Word document
-def generate_doc(ref, name, old_salary, new_salary, old_position, new_position):
+# Function to generate Word document for offer letter
+def generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_position):
     doc = Document()
     doc.styles['Normal'].paragraph_format.line_spacing = 1.3
     doc.add_paragraph(f"Date: April 10th, 2024").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -65,8 +65,8 @@ def generate_doc(ref, name, old_salary, new_salary, old_position, new_position):
     doc.add_paragraph("Yours sincerely, \n\n\n _______________ \n Santosh Koirala \n Executive Director \n Signed Date: ")
     return doc
 
-# Function to generate PDF document
-def generate_pdf(ref, name, old_salary, new_salary, old_position, new_position):
+# Function to generate PDF document for offer letter
+def generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, new_position):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
@@ -125,21 +125,118 @@ def generate_pdf(ref, name, old_salary, new_salary, old_position, new_position):
     pdf.cell(200, 10, txt="Signed Date:", ln=True, align='L')
     return pdf
 
+# Function to generate Word document for rejection letter
+def generate_rejection_letter(ref, name):
+    doc = Document()
+    doc.styles['Normal'].paragraph_format.line_spacing = 1.3
+    doc.add_paragraph(f"Date: April 10th, 2024").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    doc.add_paragraph(f" REF:{ref} ").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    paragraph = doc.add_paragraph(" \n Subject: Application Status")
+    run = paragraph.runs[0]
+    run.bold = True
+    paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    doc.add_paragraph(f"Dear {name},").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+    doc.add_paragraph("""We appreciate the time and effort you have invested in applying for the position at Techkraft Inc Pvt. Ltd. After careful consideration of your application and the qualifications presented, we regret to inform you that we have decided to move forward with other candidates whose experiences and qualifications more closely match our current needs.""").alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    doc.add_paragraph("""\nPlease do not consider this decision a reflection of your abilities. The selection process was highly competitive, and we encourage you to apply for future openings that match your skills and interests.""").alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    doc.add_paragraph("""\nWe thank you for your interest in joining Techkraft Inc Pvt. Ltd. and wish you all the best in your future endeavors.""").alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    for paragraph in doc.paragraphs:
+        paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    doc.add_paragraph("Yours sincerely, \n\n\n _______________ \n HR Team \n Techkraft Inc Pvt. Ltd.")
+    return doc
+
+# Function to generate Word document for experience letter
+def generate_experience_letter(ref, name, position, start_date, end_date):
+    doc = Document()
+    doc.styles['Normal'].paragraph_format.line_spacing = 1.3
+    doc.add_paragraph(f"Date: April 10th, 2024").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    doc.add_paragraph(f" REF:{ref} ").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    paragraph = doc.add_paragraph(" \n Subject: Experience Certificate")
+    run = paragraph.runs[0]
+    run.bold = True
+    paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    doc.add_paragraph(f"To Whom It May Concern,").alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+    doc.add_paragraph(
+        f"""This is to certify that {name} was employed with Techkraft Inc Pvt. Ltd. as a {position} from {start_date} to {end_date}. During this period, {name} demonstrated outstanding professional conduct and contributed significantly to our projects."""
+    ).alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    doc.add_paragraph(
+        f"""{name} was a dedicated employee and exhibited excellent work ethics and team spirit. {name}'s skills and knowledge in the field have been a valuable asset to our company."""
+    ).alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    doc.add_paragraph(
+        f"""We wish {name} all the best in their future career endeavors."""
+    ).alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    for paragraph in doc.paragraphs:
+        paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    doc.add_paragraph("Yours sincerely, \n\n\n _______________ \n HR Team \n Techkraft Inc Pvt. Ltd.")
+    return doc
+
+# Function to generate PDF document for experience letter
+def generate_experience_letter_pdf(ref, name, position, start_date, end_date):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="Date: April 10th, 2024", ln=True, align='L')
+    pdf.cell(200, 10, txt=f" REF:{ref} ", ln=True, align='L')
+    pdf.set_font("Arial", 'B', size=12)
+    pdf.cell(200, 10, txt="Subject: Experience Certificate", ln=True, align='L')
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="To Whom It May Concern,", ln=True, align='L')
+    pdf.multi_cell(0, 10, f"""This is to certify that {name} was employed with Techkraft Inc Pvt. Ltd. as a {position} from {start_date} to {end_date}. During this period, {name} demonstrated outstanding professional conduct and contributed significantly to our projects.""")
+    pdf.ln()
+    pdf.multi_cell(0, 10, f"""{name} was a dedicated employee and exhibited excellent work ethics and team spirit. {name}'s skills and knowledge in the field have been a valuable asset to our company.""")
+    pdf.ln()
+    pdf.multi_cell(0, 10, f"""We wish {name} all the best in their future career endeavors.""")
+    pdf.ln()
+    pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
+    pdf.cell(200, 10, txt="_______________", ln=True, align='L')
+    pdf.cell(200, 10, txt="HR Team", ln=True, align='L')
+    pdf.cell(200, 10, txt="Techkraft Inc Pvt. Ltd.", ln=True, align='L')
+    return pdf
+
+
+# Function to generate PDF document for rejection letter
+def generate_rejection_letter_pdf(ref, name):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="Date: April 10th, 2024", ln=True, align='L')
+    pdf.cell(200, 10, txt=f" REF:{ref} ", ln=True, align='L')
+    pdf.set_font("Arial", 'B', size=12)
+    pdf.cell(200, 10, txt="Subject: Application Status", ln=True, align='L')
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt=f"Dear {name},", ln=True, align='L')
+    pdf.multi_cell(0, 10, """We appreciate the time and effort you have invested in applying for the position at Techkraft Inc Pvt. Ltd. After careful consideration of your application and the qualifications presented, we regret to inform you that we have decided to move forward with other candidates whose experiences and qualifications more closely match our current needs.""")
+    pdf.ln()
+    pdf.multi_cell(0, 10, """\nPlease do not consider this decision a reflection of your abilities. The selection process was highly competitive, and we encourage you to apply for future openings that match your skills and interests.""")
+    pdf.ln()
+    pdf.multi_cell(0, 10, """\nWe thank you for your interest in joining Techkraft Inc Pvt. Ltd. and wish you all the best in your future endeavors.""")
+    pdf.ln()
+    pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
+    pdf.cell(200, 10, txt="_______________", ln=True, align='L')
+    pdf.cell(200, 10, txt="HR Team", ln=True, align='L')
+    pdf.cell(200, 10, txt="Techkraft Inc Pvt. Ltd.", ln=True, align='L')
+    return pdf
+
+
 # Function to load Excel file
 def load_excel_file():
     file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
     excel_file_path.set(file_path)
 
-# Function to load template file
-def load_template_file():
-    file_path = filedialog.askopenfilename(filetypes=[("Word files", "*.docx"), ("PDF files", "*.pdf")])
-    template_file_path.set(file_path)
-
 # Function to save configurations
 def save_config():
     config = {
         "excel_file": excel_file_path.get(),
-        "template_file": template_file_path.get(),
+        "template_type": template_type.get(),
         "output_option": output_option.get()
     }
     with open("config.json", "w") as config_file:
@@ -152,7 +249,7 @@ def load_config():
         with open("config.json", "r") as config_file:
             config = json.load(config_file)
         excel_file_path.set(config.get("excel_file", ""))
-        template_file_path.set(config.get("template_file", ""))
+        template_type.set(config.get("template_type", "Offer Letter"))
         output_option.set(config.get("output_option", "docx"))
         messagebox.showinfo("Success", "Configuration loaded successfully.")
     except Exception as e:
@@ -168,62 +265,109 @@ def generate_letters():
         for index, row in employee_data.iterrows():
             ref = row['ref']
             name = row['Name']
+            if template_type.get() == "Offer Letter":
+                old_salary = row['Old Salary']
+                new_salary = row['New Salary']
+                old_position = row['Old Position']
+                new_position = row['New Position']
+                if output_option.get() == "docx":
+                    doc = generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_position)
+                    doc.save(f"docs/{name.replace(' ', '_')}_Offer_Letter.docx")
+                elif output_option.get() == "pdf":
+                    pdf = generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, new_position)
+                    pdf.output(f"docs/{name.replace(' ', '_')}_Offer_Letter.pdf")
+            elif template_type.get() == "Rejection Letter":
+                if output_option.get() == "docx":
+                    doc = generate_rejection_letter(ref, name)
+                    doc.save(f"docs/{name.replace(' ', '_')}_Rejection_Letter.docx")
+                elif output_option.get() == "pdf":
+                    pdf = generate_rejection_letter_pdf(ref, name)
+                    pdf.output(f"docs/{name.replace(' ', '_')}_Rejection_Letter.pdf")
+            elif template_type.get() == "Experience Letter":
+                position = row['Position']
+                start_date = row['Start Date']
+                end_date = row['End Date']
+                if output_option.get() == "docx":
+                    doc = generate_experience_letter(ref, name, position, start_date, end_date)
+                    doc.save(f"docs/{name.replace(' ', '_')}_Experience_Letter.docx")
+                elif output_option.get() == "pdf":
+                    pdf = generate_experience_letter_pdf(ref, name, position, start_date, end_date)
+                    pdf.output(f"docs/{name.replace(' ', '_')}_Experience_Letter.pdf")
+        messagebox.showinfo("Success", "Letters generated successfully and saved in the 'docs' folder.")
+    except Exception as e:
+        messagebox.showerror("Error", f"Error occurred: {e}")
+
+# Function to preview letter
+def preview_letter():
+    try:
+        employee_data = pd.read_excel(excel_file_path.get())
+        employee_data.columns = employee_data.columns.str.strip()
+        row = employee_data.iloc[0]
+        ref = row['ref']
+        name = row['Name']
+        if template_type.get() == "Offer Letter":
             old_salary = row['Old Salary']
             new_salary = row['New Salary']
             old_position = row['Old Position']
             new_position = row['New Position']
-            if output_option.get() == "docx":
-                doc = generate_doc(ref, name, old_salary, new_salary, old_position, new_position)
-                doc.save(f"docs/{name.replace(' ', '_')}_Offer_Letter.docx")
-                preview_doc(f"docs/{name.replace(' ', '_')}_Offer_Letter.docx")
-            elif output_option.get() == "pdf":
-                pdf = generate_pdf(ref, name, old_salary, new_salary, old_position, new_position)
-                pdf.output(f"docs/{name.replace(' ', '_')}_Offer_Letter.pdf")
-                preview_pdf(f"docs/{name.replace(' ', '_')}_Offer_Letter.pdf")
-        messagebox.showinfo("Success", "Offer letters generated successfully and saved in the 'docs' folder.")
+            doc = generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_position)
+            preview_doc(doc)
+        elif template_type.get() == "Rejection Letter":
+            doc = generate_rejection_letter(ref, name)
+            preview_doc(doc)
+        elif template_type.get() == "Experience Letter":
+            position = row['Position']
+            start_date = row['Start Date']
+            end_date = row['End Date']
+            doc = generate_experience_letter(ref, name, position, start_date, end_date)
+            preview_doc(doc)
     except Exception as e:
         messagebox.showerror("Error", f"Error occurred: {e}")
 
-# Function to preview Word document
-def preview_doc(doc_path):
-    os.system(f'start winword "{doc_path}"')
+# Function to preview doc
+def preview_doc(doc):
+    preview_window = Toplevel()
+    preview_window.title("Preview Letter")
+    preview_window.geometry("800x600")
+    text_widget = Text(preview_window)
+    text_widget.pack(expand=True, fill="both")
+    for paragraph in doc.paragraphs:
+        text_widget.insert("end", paragraph.text + "\n")
 
-# Function to preview PDF document
-def preview_pdf(pdf_path):
-    os.system(f'start acrord32 "{pdf_path}"')
-
+# Main function to create GUI
 def main():
-    global excel_file_path, template_file_path, output_option
-
+    global excel_file_path, template_type, output_option
     root = Tk()
-    root.title("Offer Letter Generator")
+    root.title("Letter Generator")
     root.geometry("500x400")
 
     excel_file_path = StringVar()
-    template_file_path = StringVar()
+    template_type = StringVar(value="Offer Letter")
     output_option = StringVar(value="docx")
 
-    Label(root, text="Welcome to the Offer Letter Generator", font=("Helvetica", 14)).pack(pady=10)
-
+    Label(root, text="Welcome to the Letter Generator", font=("Helvetica", 14)).pack(pady=20)
+    
     frame = Frame(root)
     frame.pack(pady=10)
 
-    Label(frame, text="Excel File:", font=("Helvetica", 12)).grid(row=0, column=0, sticky='e', padx=10)
-    Entry(frame, textvariable=excel_file_path, width=40).grid(row=0, column=1)
-    Button(frame, text="Browse", command=load_excel_file, font=("Helvetica", 10)).grid(row=0, column=2, padx=10)
+    Label(frame, text="Excel File:").grid(row=0, column=0, padx=5, pady=5)
+    Entry(frame, textvariable=excel_file_path, width=40).grid(row=0, column=1, padx=5, pady=5)
+    Button(frame, text="Browse", command=load_excel_file).grid(row=0, column=2, padx=5, pady=5)
 
-    Label(frame, text="Template File:", font=("Helvetica", 12)).grid(row=1, column=0, sticky='e', padx=10)
-    Entry(frame, textvariable=template_file_path, width=40).grid(row=1, column=1)
-    Button(frame, text="Browse", command=load_template_file, font=("Helvetica", 10)).grid(row=1, column=2, padx=10)
+    Label(frame, text="Template Type:").grid(row=1, column=0, padx=5, pady=5)
+    OptionMenu(frame, template_type, "Offer Letter", "Rejection Letter", "Experience Letter").grid(row=1, column=1, padx=5, pady=5)
 
-    Label(root, text="Output Option:", font=("Helvetica", 12)).pack(pady=10)
-    options = ["docx", "pdf"]
-    OptionMenu(root, output_option, *options).pack(pady=5)
+    Label(frame, text="Output Option:").grid(row=2, column=0, padx=5, pady=5)
+    OptionMenu(frame, output_option, "docx", "pdf").grid(row=2, column=1, padx=5, pady=5)
 
-    Button(root, text="Generate and Preview Letters", command=generate_letters, font=("Helvetica", 12)).pack(pady=10)
-    Button(root, text="Save Configuration", command=save_config, font=("Helvetica", 12)).pack(pady=5)
-    Button(root, text="Load Configuration", command=load_config, font=("Helvetica", 12)).pack(pady=5)
-
+    Button(root, text="Generate Letters", command=generate_letters, font=("Helvetica", 12)).pack(pady=10)
+    Button(root, text="Preview Letter", command=preview_letter, font=("Helvetica", 12)).pack(pady=10)
+    
+    frame = Frame(root)
+    frame.pack(pady=10)
+    Button(frame, text="Save Configuration", command=save_config, font=("Helvetica", 12)).grid(row=0, column=0, padx=5, pady=5)
+    Button(frame, text="Load Configuration", command=load_config, font=("Helvetica", 12)).grid(row=0, column=1, padx=5, pady=5)
+    
     root.mainloop()
 
 if __name__ == "__main__":
