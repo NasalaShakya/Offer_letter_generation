@@ -100,8 +100,9 @@ def generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, n
             pdf.cell(63, 10, f"NRs. {new_salary}", 1)
             pdf.ln()
             pdf.cell(63, 10, "Designation", 1)
-            pdf.cell(63, 10, old_position, 1)
-            pdf.cell(63, 10, new_position, 1)
+            pdf.cell(63, 10, f"{old_position}", 1)
+            pdf.cell(63, 10, f"{new_position}", 1)
+            pdf.ln()
         else:
             pdf.multi_cell(0, 10, """We are pleased to formally notify you of changes to your employment contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. As per the recent review and assessment of your contribution, we are pleased to inform you that the following adjustments have been made to your salary to reflect your valuable contributions and dedication to our organization.\n""")
             pdf.ln()
@@ -122,13 +123,14 @@ def generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, n
                   "working hours, and leave entitlements, among other provisions.")
     pdf.multi_cell(0, 10, conclusion)
     
-    pdf.multi_cell(0, 10, """\nShould you require any clarification or have any queries regarding these adjustments, please do not hesitate to reach out to the People and Culture Department. """)
+    pdf.multi_cell(0, 10, """Should you require any clarification or have any queries regarding these adjustments, please do not hesitate to reach out to the People and Culture Department. """)
     
-    pdf.multi_cell(0, 10, """\nThank you for your ongoing dedication and contributions to Techkraft Inc Pvt. Ltd. We eagerly anticipate your continued success within the team. \n""")
-    pdf.ln(20)
-    pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
+    pdf.multi_cell(0, 10, """Thank you for your ongoing dedication and contributions to Techkraft Inc Pvt. Ltd. We eagerly anticipate your continued success within the team. \n""")
+    
+    pdf.cell(200, 10, txt="\nYours sincerely,", ln=True, align='L')
+    pdf.ln(15)
     pdf.cell(200, 10, txt="_______________", ln=True, align='L')
-    pdf.cell(200, 10, txt="Santosh Koirala", ln=True, align='L')
+    pdf.cell(200, 10, txt="Sam Kim", ln=True, align='L')
     pdf.cell(200, 10, txt="Executive Director", ln=True, align='L')
     pdf.cell(200, 10, txt="Signed Date:", ln=True, align='L')
     return pdf
@@ -236,8 +238,14 @@ def generate_rejection_letter_pdf(ref, name):
 
 # Function to load Excel file
 def load_excel_file():
-    file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
-    excel_file_path.set(file_path)
+    #file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+    #excel_file_path.set(file_path)
+    file_path = filedialog.askopenfilenames(filetypes=[("Excel files", "*.xlsx")])
+    if file_path:
+        excel_file_path.set("; ".join(file_path))
+    else:
+        excel_file_path.set("")
+#file_path = excel_file_path_var.get().split("; ")
 
 # Function to save configurations
 def save_config():
@@ -264,6 +272,7 @@ def load_config():
 
 # Function to generate and preview letters
 def generate_letters():
+    file_path = excel_file_path.get().split("; ")
     try:
         employee_data = pd.read_excel(excel_file_path.get())
         employee_data.columns = employee_data.columns.str.strip()
@@ -345,14 +354,14 @@ def preview_doc(doc):
 def main():
     global excel_file_path, template_type, output_option
     root = Tk()
-    root.title("Letter Generator")
+    root.title("Automated Letter Generation System")
     root.geometry("500x400")
 
     excel_file_path = StringVar()
     template_type = StringVar(value="Offer Letter")
     output_option = StringVar(value="docx")
 
-    Label(root, text="Welcome to the Letter Generator", font=("Helvetica", 14)).pack(pady=20)
+    Label(root, text="Welcome to the Automated Letter Generation System", font=("Helvetica", 14)).pack(pady=20)
     
     frame = Frame(root)
     frame.pack(pady=10)
