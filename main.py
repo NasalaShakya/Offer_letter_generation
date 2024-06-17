@@ -23,7 +23,11 @@ def generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_p
 
     def print_line_if_new_position(new_position):
         if pd.notnull(new_position) and new_position.strip():
-            run = offer_letter_paragraph.add_run("""We are pleased to formally notify you of changes to your employment contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. As per the recent review and assessment of your contribution, we are pleased to inform you that the following adjustments have been made to your salary and designation to reflect your valuable contributions and dedication to our organization. """)
+            run = offer_letter_paragraph.add_run("We are pleased to formally notify you of changes to your employment "
+                   "contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. "
+                   "As per the recent review and assessment of your contribution, we are pleased "
+                   "to inform you that the following adjustments have been made to your salary and "
+                   "designation to reflect your valuable contributions and dedication to our organization.")
             run.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             table = doc.add_table(rows=3, cols=3)
             table.style = 'Table Grid'
@@ -38,7 +42,11 @@ def generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_p
             table.rows[2].cells[1].text = old_position
             table.rows[2].cells[2].text = new_position
         else:
-            run = offer_letter_paragraph.add_run("""We are pleased to formally notify you of changes to your employment contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. As per the recent review and assessment of your contribution, we are pleased to inform you that the following adjustment have been made to your salary to reflect your valuable contributions and dedication to our organization. \n""")
+            run = offer_letter_paragraph.add_run("We are pleased to formally notify you of changes to your employment "
+                   "contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. "
+                   "As per the recent review and assessment of your contribution, we are pleased "
+                   "to inform you that the following adjustment has been made to your salary to "
+                   "reflect your valuable contributions and dedication to our organization.")
             run.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             table = doc.add_table(rows=2, cols=3)
             table.style = 'Table Grid'
@@ -59,7 +67,7 @@ def generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_p
                   "working hours, and leave entitlements, among other provisions.")
     doc.add_paragraph(conclusion).alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
     doc.add_paragraph("""\nShould you require any clarification or have any queries regarding these adjustments, please do not hesitate to reach out to the People and Culture Department. """)
-    doc.add_paragraph("""\nThank you for your ongoing dedication and contributions to Techkraft Inc Pvt. Ltd. We eagerly anticipate your continued success within the team. \n""")
+    doc.add_paragraph("Thank you for your ongoing dedication and contributions to Techkraft Inc Pvt. Ltd. We eagerly anticipate your continued success within the team.")
     for paragraph in doc.paragraphs:
         paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
     doc.add_paragraph("Yours sincerely, \n\n\n _______________ \n Santosh Koirala \n Executive Director \n Signed Date: ")
@@ -69,19 +77,19 @@ def generate_offer_letter(ref, name, old_salary, new_salary, old_position, new_p
 def generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, new_position):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Arial", size=11)
     pdf.cell(200, 10, txt="Date: April 10th, 2024", ln=True, align='L')
     pdf.cell(200, 10, txt=f" REF:{ref} ", ln=True, align='L')
-    pdf.set_font("Arial", 'B', size=12)
+    pdf.set_font("Arial", 'B', size=11)
     pdf.cell(200, 10, txt="Subject: Review and Appraisal", ln=True, align='L')
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Arial", size=11)
     pdf.cell(200, 10, txt=f"Dear {name},", ln=True, align='L')
 
     def print_line_if_new_position(new_position):
         if pd.notnull(new_position) and new_position.strip():
             pdf.multi_cell(0, 10, """We are pleased to formally notify you of changes to your employment contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. As per the recent review and assessment of your contribution, we are pleased to inform you that the following adjustments have been made to your salary and designation to reflect your valuable contributions and dedication to our organization.""")
             pdf.ln()
-            pdf.set_font("Arial", 'B', size=12)
+            pdf.set_font("Arial", 'B', size=11)
             pdf.cell(63, 10, "Particular", 1)
             pdf.cell(63, 10, "Current Details", 1)
             pdf.cell(63, 10, "New Details", 1)
@@ -97,12 +105,12 @@ def generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, n
         else:
             pdf.multi_cell(0, 10, """We are pleased to formally notify you of changes to your employment contract with Techkraft Inc Pvt. Ltd., effective from January 1st, 2024. As per the recent review and assessment of your contribution, we are pleased to inform you that the following adjustments have been made to your salary to reflect your valuable contributions and dedication to our organization.\n""")
             pdf.ln()
-            pdf.set_font("Arial", 'B', size=12)
+            pdf.set_font("Arial", 'B', size=11)
             pdf.cell(63, 10, "Particular", 1)
             pdf.cell(63, 10, "Current Details", 1)
             pdf.cell(63, 10, "New Details", 1)
             pdf.ln()
-            pdf.set_font("Arial", size=12)
+            pdf.set_font("Arial", size=11)
             pdf.cell(63, 10, "Salary", 1)
             pdf.cell(63, 10, f"NRs. {old_salary}", 1)
             pdf.cell(63, 10, f"NRs. {new_salary}", 1)
@@ -113,9 +121,9 @@ def generate_offer_letter_pdf(ref, name, old_salary, new_salary, old_position, n
                   "original employment contract will remain unchanged and in full effect. This encompasses your benefits, "
                   "working hours, and leave entitlements, among other provisions.")
     pdf.multi_cell(0, 10, conclusion)
-    pdf.ln()
+    
     pdf.multi_cell(0, 10, """\nShould you require any clarification or have any queries regarding these adjustments, please do not hesitate to reach out to the People and Culture Department. """)
-    pdf.ln()
+    
     pdf.multi_cell(0, 10, """\nThank you for your ongoing dedication and contributions to Techkraft Inc Pvt. Ltd. We eagerly anticipate your continued success within the team. \n""")
     pdf.ln(20)
     pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
@@ -191,9 +199,9 @@ def generate_experience_letter_pdf(ref, name, position, start_date, end_date):
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="To Whom It May Concern,", ln=True, align='L')
     pdf.multi_cell(0, 10, f"""This is to certify that {name} was employed with Techkraft Inc Pvt. Ltd. as a {position} from {start_date} to {end_date}. During this period, {name} demonstrated outstanding professional conduct and contributed significantly to our projects.""")
-    pdf.ln()
+    
     pdf.multi_cell(0, 10, f"""{name} was a dedicated employee and exhibited excellent work ethics and team spirit. {name}'s skills and knowledge in the field have been a valuable asset to our company.""")
-    pdf.ln()
+    
     pdf.multi_cell(0, 10, f"""We wish {name} all the best in their future career endeavors.""")
     pdf.ln()
     pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
@@ -201,7 +209,6 @@ def generate_experience_letter_pdf(ref, name, position, start_date, end_date):
     pdf.cell(200, 10, txt="HR Team", ln=True, align='L')
     pdf.cell(200, 10, txt="Techkraft Inc Pvt. Ltd.", ln=True, align='L')
     return pdf
-
 
 # Function to generate PDF document for rejection letter
 def generate_rejection_letter_pdf(ref, name):
@@ -215,9 +222,9 @@ def generate_rejection_letter_pdf(ref, name):
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt=f"Dear {name},", ln=True, align='L')
     pdf.multi_cell(0, 10, """We appreciate the time and effort you have invested in applying for the position at Techkraft Inc Pvt. Ltd. After careful consideration of your application and the qualifications presented, we regret to inform you that we have decided to move forward with other candidates whose experiences and qualifications more closely match our current needs.""")
-    pdf.ln()
+    
     pdf.multi_cell(0, 10, """\nPlease do not consider this decision a reflection of your abilities. The selection process was highly competitive, and we encourage you to apply for future openings that match your skills and interests.""")
-    pdf.ln()
+    
     pdf.multi_cell(0, 10, """\nWe thank you for your interest in joining Techkraft Inc Pvt. Ltd. and wish you all the best in your future endeavors.""")
     pdf.ln()
     pdf.cell(200, 10, txt="Yours sincerely,", ln=True, align='L')
